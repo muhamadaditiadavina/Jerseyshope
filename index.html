@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping jersey</title>
+    <!-- Add favicon link here -->
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="logo.png" alt="Shop Logo" style="height: 40px; width: auto; margin-right: 0.5rem;">
+                <span>Shopping jersey</span>
+            </div>
+            <ul class="menu">
+                <li><a href="#home" class="active" onclick="showSection('home')">Home</a></li>
+                <li><a href="#shop" onclick="showSection('shop')">Shop</a></li>
+                <li><a href="#about" onclick="showSection('about')">About</a></li>
+                <li><a href="#contact" onclick="showSection('contact')">Contact</a></li>
+                <li><a href="#" onclick="showLoginModal()">Login</a></li>
+                <li class="cart-icon">
+                    <a href="#" onclick="showCartModal()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="headerCartCount">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="home" class="section active">
+        <main>
+            <div class="filters">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search for ..">
+                </div>
+                <select id="sortBy">
+                    <option value="">Sort by</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="rating-desc">Rating: High to Low</option>
+                    <option value="date-desc">Newest First</option>
+                </select>
+                <select id="filterOrigin">
+                    <option value="">All Origins</option>
+                    <option value="USA">USA</option>
+                    <option value="indonesia">Indonesia</option>
+                    <option value="brazil">Brazil</option>ption>
+                    <option value="Poland">Poland</option>ion>
+                    <option value="costa-rica">Costa Rica</option>
+                    <option value="germany">germany</option>ion>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Vietnam">Vietnam</option>
+                </select>
+                <select id="filterRoast">
+                    <option value="">All Types</option>
+                    <option value="home">Home</option>
+                    <option value="away">Away</option>
+                </select>
+            </div>
+            
+            <div class="products" id="productsContainer">
+                <!-- Products will be inserted here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <div id="shop" class="section" style="display:none;">
+        <main>
+            <h1>Jersey </h1>
+            <p>Browse our complete collection of specialty Jersey.</p>
+            <div class="products" id="shopProducts"></div>
+        </main>
+    </div>
+
+    <div id="about" class="section" style="display:none;">
+        <main>
+            <h1>About Shopping Jersey</h1>
+            <p>Selamat datang di Shopping Jersey, rumahnya para pecinta jersey!
+                Kami adalah toko yang berdedikasi untuk menyediakan berbagai macam jersey berkualitas tinggi untuk para fans olahraga sejati. Mulai dari jersey klub sepak bola lokal hingga tim-tim internasional, dari edisi terbaru hingga edisi klasik yang legendaris – semuanya kami hadirkan demi memuaskan hasrat para kolektor dan pendukung setia.
+                Didirikan pada tahun 2024, kami berawal dari kecintaan terhadap olahraga dan semangat untuk membangun komunitas penggemar yang bangga mengenakan identitas tim favoritnya. Di Shopping Jersey, kami percaya bahwa sebuah jersey bukan hanya pakaian, tapi simbol loyalitas, kebanggaan, dan cerita.</p>
+        </main>
+    </div>
+
+    <div id="contact" class="section" style="display:none;">
+        <main>
+            <h1>Contact Us</h1>
+            <div class="contact-form">
+                <form onsubmit="submitContact(event)">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-input" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <div class="sticky-cart" onclick="showCartModal()">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="sticky-cart-count" id="stickyCartCount">0</span>
+    </div>
+
+    <div class="modal" id="cartModal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Your Cart</h4>
+                <button class="close-modal" onclick="hideCartModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="cart-items" id="cartItems"></div>
+                <div class="cart-total">
+                    <div class="cart-total-row">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal">$0.00</span>
+                    </div>
+                    <div class="cart-total-row">
+                        <span>Shipping</span>
+                        <span id="cartShipping">$5.00</span>
+                    </div>
+                    <div class="cart-total-row final">
+                        <span>Total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                </div>
+                <button class="btn" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Login</h4>
+                <button class="close-modal" onclick="hideLoginModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <div class="auth-links">
+                    <p>Don't have an account? <a href="#" onclick="showRegisterFromLogin()">Register</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="modal" id="registerModal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Register</h4>
+                <button class="close-modal" onclick="hideRegisterModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Phone Number/WhatsApp</label>
+                        <input type="tel" id="regPhone" class="form-input" pattern="[0-9]+" required>
+                        <small class="hint">Enter numbers only, no spaces or special characters</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">Username</label>
+                        <input type="text" id="regUsername" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" class="form-input" required>
+                        <small class="hint">Password must contain at least one uppercase letter, one number, and one special character</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirm Password</label>
+                        <input type="password" id="regConfirmPassword" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                </form>
+                <div class="auth-links">
+                    <p>Already have an account? <a href="#" onclick="showLoginFromRegister()">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Purchase Receipt</h4>
+                <button class="close-modal" onclick="hideReceiptModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="receipt">
+                    <div class="receipt-header">
+                        <h3>Shopping Jersey</h3>
+                        <p>Date: <span id="receiptDate"></span></p>
+                        <p>Transaction ID: <span id="receiptId"></span></p>
+                    </div>
+                    <div class="receipt-items" id="receiptItems"></div>
+                    <div class="receipt-summary">
+                        <div class="receipt-row">
+                            <span>Subtotal:</span>
+                            <span id="receiptSubtotal"></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Shipping:</span>
+                            <span id="receiptShipping"></span>
+                        </div>
+                        <div class="receipt-row total">
+                            <span>Total:</span>
+                            <span id="receiptTotal"></span>
+                        </div>
+                    </div>
+                    <div class="receipt-footer">
+                        <p>Thank you for your purchase!</p>
+                        <button class="btn" onclick="printReceipt()">Print Receipt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Selamat datang di Shopping Jersey, rumahnya para pecinta jersey!
+
+                    Kami adalah toko yang berdedikasi untuk menyediakan berbagai macam jersey berkualitas tinggi untuk para fans olahraga.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home" onclick="showSection('home')">Home</a></li>
+                    <li><a href="#shop" onclick="showSection('shop')">Shop</a></li>
+                    <li><a href="#about" onclick="showSection('about')">About</a></li>
+                    <li><a href="#contact" onclick="showSection('contact')">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Jatinangor,Shopping Jersey</li>
+                    <li><i class="fas fa-phone"></i> +6285974314120</li>
+                    <li><i class="fas fa-envelope"></i> muhammadaditia@gmail.com</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Shoppin Jersey, All rights reserved.
+        </div>
+    </footer>
+    
+    <script src ="script.js"></script>
+</body>
+</html>
