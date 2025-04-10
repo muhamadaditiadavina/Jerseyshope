@@ -1,5 +1,5 @@
- // Sample product data
- const products = [
+// Sample product data
+const products = [
     {
         id: 1,
         name: "Jearsy harrison jr",
@@ -390,11 +390,25 @@ function hideCartModal() {
     document.getElementById('cartModal').style.display = 'none';
 }
 
+// Add this function to check if user is logged in
+function isLoggedIn() {
+    return document.querySelector('.menu li:nth-last-child(2)').textContent.includes('Logout');
+}
+
+// Replace the existing checkout function with this new one
 function checkout() {
     if (cart.length === 0) {
         alert('Your cart is empty!');
         return;
     }
+
+    // Check if user is logged in
+    if (!isLoggedIn()) {
+        alert('Please login first before checking out');
+        showLoginModal();
+        return;
+    }
+
     // Generate receipt data
     const receiptDate = new Date().toLocaleDateString();
     const receiptId = Math.random().toString(36).substr(2, 9);
@@ -475,11 +489,19 @@ function handleLogin(event) {
     }
 }
 
+// Modify the loginSuccess function to handle pending checkout
 function loginSuccess(name) {
     alert(`Welcome ${name}!`);
     hideLoginModal();
     document.querySelector('.menu li:nth-last-child(2)').innerHTML = 
         `<a href="#" onclick="logout()">${name} (Logout)</a>`;
+    
+    // If there are items in cart, ask if user wants to proceed to checkout
+    if (cart.length > 0) {
+        if (confirm('Would you like to proceed to checkout?')) {
+            checkout();
+        }
+    }
 }
 
 function showLoginModal() {
